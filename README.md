@@ -31,11 +31,11 @@ Django REST API application for blog.
 
 <h3>Registration and authorization</h3>
 
-Is used to register and get access token (or refresh access token) for authorizing the requests.
+ Allows to register and get access token (or refresh access token) for authorizing the requests. Access token is valid for 1 day, refresh token is valid for 7 days.
 
   **Endpoints:**
 <ul>
-<li><h4>POST /api/auth/</h4> -  user registration</li>
+<li><h4>POST /api/auth/</h4> - register a new user</li>
 </ul>
 <br>
 
@@ -84,7 +84,7 @@ Is used to register and get access token (or refresh access token) for authorizi
     }
     
 <ul>
-<li><h4>POST /api/auth/token/</h4> -  getting access and refresh tokens for registrated user</li>
+<li><h4>POST /api/auth/token/</h4> - get access and refresh tokens for registrated user</li>
 </ul>
 <br>
 
@@ -106,14 +106,14 @@ Is used to register and get access token (or refresh access token) for authorizi
   
     HTTP 200 OK
     {
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
-    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+        "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
+        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
     }
 
 
     HTTP 401 Unauthorized
     {
-    "detail": "No active account found with the given credentials"
+         "detail": "No active account found with the given credentials"
     }
     
     
@@ -132,7 +132,7 @@ Is used to register and get access token (or refresh access token) for authorizi
     }
     
 <ul>
-<li><h4>POST /api/auth/token/refresh/</h4> -  getting access and refresh tokens for registrated user</li>
+<li><h4>POST /api/auth/token/refresh/</h4> - get new access token</li>
 </ul>
 <br>
 
@@ -152,15 +152,129 @@ Is used to register and get access token (or refresh access token) for authorizi
   
     HTTP 200 OK
     {
-    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
     }
 
 
     HTTP 401 Unauthorized
     {
-    "detail": "Token is invalid or expired",
-    "code": "token_not_valid"
+        "detail": "Token is invalid or expired",
+        "code": "token_not_valid"
     }
    
    
+<h3>Creating and getting posts</h3>
+
+Allows to create posts (for authorized users, acces token required) and get list of all posts or certain user's posts sorted by publication date in order from newest to olders. Post contains of fields: title, text, publication date, author. Field author gets a current authorized user, publication date gets a current UTS date and time value.
+
+  **Endpoints:**
+<ul>
+<li><h4>POST /api/post/</h4> - create post</li>
+</ul>
+<br>    
+
+  Header params
+  
+*Content-Type: application/json*
+
+*Authorization: Bearer {acces_token}*
+
+<br>
+
+  Body params: 
+
+*title* (required) - Max length 80 characters.
+*text* (required)
+
+<br>
+
+
+  Response examples:
+  
+    HTTP 201 Created
+    {
+        "id": 9,
+        "title": "title",
+        "text": "text text text",
+        "author_id": 1,
+        "pub_date": "2023-04-08T12:24:51.185666Z"
+    }
+
+    HTTP 401 Unauthorized
+    {
+        "detail": "Authentication credentials were not provided."
+    }
     
+    HTTP 400 Bad Request
+    {
+        "title": [
+            "This field is required."
+        ],
+        "text": [
+            "This field is required."
+        ]
+    }
+
+   
+<ul>
+<li><h4>GET /api/post/</h4> - get all posts</li>
+</ul>
+<br>    
+
+  Response examples:   
+  
+  
+    HTTP 200 OK
+    [
+       {
+            "id": 3,
+            "title": "TextTitle3",
+            "text": "TestText3",
+            "author_id": 1,
+            "pub_date": "2023-04-07T17:39:37.172921Z"
+        },
+        {
+            "id": 2,
+            "title": "TextTitle2",
+            "text": "TestText2",
+            "author_id": 2,
+            "pub_date": "2023-04-07T17:37:16.608617Z"
+        },
+        {
+            "id": 1,
+            "title": "TextTitle1",
+            "text": "TestText1",
+            "author_id": 1,
+            "pub_date": "2023-04-07T17:36:07.213059Z"
+    ]
+<ul>
+<li><h4>GET /api/post/{user_id}/</h4> - get all posts by user with id = user_id</li>
+</ul>
+<br>    
+
+ Path params:
+ 
+ *user_id* - integer
+ 
+<br>
+
+ Response examples:
+ 
+ 
+    HTTP 200 OK
+    [
+       {
+            "id": 3,
+            "title": "TextTitle3",
+            "text": "TestText3",
+            "author_id": 1,
+            "pub_date": "2023-04-07T17:39:37.172921Z"
+        },
+        {
+            "id": 1,
+            "title": "TextTitle1",
+            "text": "TestText1",
+            "author_id": 1,
+            "pub_date": "2023-04-07T17:36:07.213059Z"
+        }
+    ]

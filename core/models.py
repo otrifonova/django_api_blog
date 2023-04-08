@@ -5,17 +5,17 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     following = models.ManyToManyField('self',
                                        symmetrical=False,
-                                       through='Subscription',
+                                       through='Follow',
                                        blank=True)
 
 
-class Subscription(models.Model):
+class Follow(models.Model):
     from_user = models.ForeignKey(User,
                                   on_delete=models.CASCADE)
     to_user = models.ForeignKey(User,
                                 on_delete=models.CASCADE,
                                 related_name='followers')
-    sub_date = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateTimeField(auto_now_add=True)
 
 
 class Post(models.Model):

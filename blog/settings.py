@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'api.authentication.apps.AuthConfig',
     'api.user.apps.UserConfig',
     'api.post.apps.PostConfig',
+    'api.follow.apps.FollowConfig',
 
     'djoser',
     'rest_framework',

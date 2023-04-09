@@ -12,7 +12,7 @@ Django REST API application for blog.
 
     $ pip install -r requirements.txt
 </li>  
-<li>Create .env file and set global variables in it (SECRET_KEY and database (PostgreSQL) data: DB_NAME, DB_USER, DB_PASSWORD</li> 
+<li>Create .env file and set global variables in it (SECRET_KEY and database (PostgreSQL) data: DB_NAME, DB_USER, DB_PASSWORD)</li> 
 <li>Run a database migration:
 
     $ python manage.py makemigrations
@@ -56,18 +56,19 @@ Get a list of users:
 
 Follow or unfollow a user:
 <ul>
-    <li>GET /api/user/{user_id}/follow - follow a user with id=user_id (authorized)</li>
-    <li>GET /api/user/{user_id}/unfollow - stop following a user with id=user_id (authorized)</li>
+    <li>PUT /api/user/{user_id}/follow - follow a user with id=user_id (authorized)</li>
+    <li>PUT /api/user/{user_id}/unfollow - stop following a user with id=user_id (authorized)</li>
 </ul>
 
 
 <h3>Registrate and authenticate the user</h3>
 
- Allows to register and get an access token (or a refresh access token) for authorizing the requests. The access token is valid for 1 day, the refresh token is valid for 7 days.
+ Allow to register and get an access token (or a refresh access token) for authorizing the requests. The access token is valid for 1 day, the refresh token is valid for 7 days.
 
 <ul>
 <li><h4>POST /api/auth/</h4> - register a new user</li>
 </ul>
+
 <br>
 
   <h6>Header params</h6>
@@ -82,11 +83,11 @@ Follow or unfollow a user:
 
 *password* (required) - Must be a valid password (at least 8 characters, not too common, not too similar to the username).
 
-*email* - Must be a valid email address.
+*email* (optional)- Must be a valid email address.
 
-*first_name*
+*first_name* (optional)
 
-*last_name*
+*last_name* (optional)
 
 <br>
 
@@ -119,6 +120,7 @@ Follow or unfollow a user:
 <ul>
 <li><h4>POST /api/auth/token/</h4> - get an access and a refresh tokens for a registered user</li>
 </ul>
+
 <br>
 
   <h6>Header params</h6>
@@ -135,7 +137,8 @@ Follow or unfollow a user:
 
 <br>
 
-  <h6>Response examples:<h6>
+  <h6>Response examples:</h6>
+  
   
     HTTP 200 OK
     {
@@ -169,6 +172,7 @@ Follow or unfollow a user:
 <ul>
 <li><h4>POST /api/auth/token/refresh/</h4> - get a new access token</li>
 </ul>
+
 <br>
 
   <h6>Header params</h6>
@@ -201,14 +205,14 @@ Follow or unfollow a user:
 
 <h3>Create and get a list of posts</h3>
 
-Allows to create posts (for the authorized users, an access token required) and get a list of all the certain user's posts sorted by a publication date in order from newest to oldest. The post contains fields: title, text, publication date, author. The field "author" gets a current authorized user, the field "publication date" gets a current UTC date and time value.
+Allow to create posts (for the authorized users, an access token required) and get a list of all the certain user's posts sorted by a publication date in order from newest to oldest. The post contains fields: title, text, publication date, author. The field "author" gets a current authorized user, the field "publication date" gets a current UTC date and time value.
 
 <br>
 
-  **Endpoints:**
 <ul>
 <li><h4>POST /api/post/</h4> - create a post</li>
 </ul>
+
 <br>    
 
   <h6>Header params</h6>
@@ -222,10 +226,10 @@ Allows to create posts (for the authorized users, an access token required) and 
   <h6>Body params: </h6>
 
 *title* (required) - Max length 80 characters.
+
 *text* (required)
 
 <br>
-
 
   <h6>Response examples:</h6>
   
@@ -258,6 +262,7 @@ Allows to create posts (for the authorized users, an access token required) and 
 <ul>
 <li><h4>GET /api/post/{user_id}/</h4> - get all posts (optionally by a user with id = user_id)</li>
 </ul>
+
 <br>    
 
  <h6>Path params:</h6>
@@ -267,7 +272,6 @@ Allows to create posts (for the authorized users, an access token required) and 
 <br>
 
  <h6>Response examples:</h6>
- 
  
     HTTP 200 OK
     [
@@ -291,9 +295,8 @@ Allows to create posts (for the authorized users, an access token required) and 
 
 <h3>Get a list of users</h3>
 
-Allows to get a list of users optionally sorted by number of posts.
+Allow to get a list of users optionally sorted by number of posts.
 
-  **Endpoints:**
 <ul>
 <li><h4>GET /api/user/</h4> - get a list of users</li>
 </ul>
@@ -329,13 +332,10 @@ Allows to get a list of users optionally sorted by number of posts.
 
 <br>
 
-  
 <h3>Follow or unfollow a user</h3>
 
 Allows authorized users to start and stop following the posts of another user.
 
-
-**Endpoints:**
 <ul>
 <li><h4>PUT /api/user/{user_id}/follow</h4> - start following a user with id=user_id.</li>
 </ul>
@@ -352,7 +352,7 @@ Allows authorized users to start and stop following the posts of another user.
 
 <br>
 
-<h6>Response examples:</h6>
+   <h6>Response examples:</h6>
 
     HTTP 200 OK
     {
@@ -387,7 +387,7 @@ Allows authorized users to start and stop following the posts of another user.
 
 <br>
 
-<h6>Response examples:</h6>
+  <h6>Response examples:</h6>
 
     HTTP 200 OK
     {

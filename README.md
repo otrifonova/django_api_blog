@@ -26,30 +26,55 @@ Django REST API application for blog.
 
     $ python manage.py tests
 </li> 
+</ol>
 
 <h1>API methods</h1>
 
-<h3>Registration and authorization</h3>
+Registrate and authenticate the user:
+<ul>
+    <li>POST /api/auth/ - register a new user</li>
+    <li>POST /api/auth/token/ - get an access and a refresh tokens for a registered user</li>
+    <li>POST /api/auth/token/refresh/ - get a new access token</li>
+</ul>
 
- Allows to register and get access token (or refresh access token) for authorizing the requests. Access token is valid for 1 day, refresh token is valid for 7 days.
+Create and get a list of posts:
+<ul>
+    <li>POST /api/post/ - create a post (authorized)</li>
+    <li>GET /api/post/{user_id}/ - get all posts (optionally by a user with id = user_id}</li>
+</ul>
 
-  **Endpoints:**
+Get a list of users:
+<ul>
+    <li>GET /api/user/ - get a list of users (with a query parameter "sorting=posts_desc|posts_asc" for sorting by number of posts)</li>
+</ul>
+
+Follow or unfollow a user:
+<ul>
+    <li>GET /api/user/{user_id}/follow - follow a user with id=user_id (authorized)</li>
+    <li>GET /api/user/{user_id}/unfollow - stop following a user with id=user_id (authorized)</li>
+</ul>
+
+
+<h3>Registrate and authenticate the user</h3>
+
+ Allows to register and get an access token (or a refresh access token) for authorizing the requests. The access token is valid for 1 day, the refresh token is valid for 7 days.
+
 <ul>
 <li><h4>POST /api/auth/</h4> - register a new user</li>
 </ul>
 <br>
 
-  Header params
+  <h6>Header params</h6>
   
 *Content-Type: application/json*
 
 <br>
 
-  Body params: 
+  <h6>Body params:</h6> 
 
 *username* (required) - This value may contain only letters, numbers, and @/./+/-/_ characters. Must be unique (does not exist in the database).
 
-*password* (required) - Must be a valid password (at least 8 characters, not too common, not too similar to username).
+*password* (required) - Must be a valid password (at least 8 characters, not too common, not too similar to the username).
 
 *email* - Must be a valid email address.
 
@@ -59,7 +84,7 @@ Django REST API application for blog.
 
 <br>
 
-  Response examples:
+  <h6>Response examples:</h6>
   
     HTTP 201 Created
     {
@@ -83,18 +108,20 @@ Django REST API application for blog.
         ]  
     }
     
+<br>
+
 <ul>
-<li><h4>POST /api/auth/token/</h4> - get access and refresh tokens for registrated user</li>
+<li><h4>POST /api/auth/token/</h4> - get an access and a refresh tokens for a registered user</li>
 </ul>
 <br>
 
-  Header params
+  <h6>Header params</h6>
   
 *Content-Type: application/json*
 
 <br>
 
-  Body params: 
+  <h6>Body params: </h6>
 
 *username* (required)
 
@@ -102,7 +129,7 @@ Django REST API application for blog.
 
 <br>
 
-  Response examples:
+  <h6>Response examples:<h6>
   
     HTTP 200 OK
     {
@@ -131,24 +158,26 @@ Django REST API application for blog.
         ]  
     }
     
+<br>
+
 <ul>
-<li><h4>POST /api/auth/token/refresh/</h4> - get new access token</li>
+<li><h4>POST /api/auth/token/refresh/</h4> - get a new access token</li>
 </ul>
 <br>
 
-  Header params
+  <h6>Header params</h6>
   
 *Content-Type: application/json*
 
 <br>
 
-  Body params: 
+  <h6>Body params: </h6>
 
 *refresh* (required) - Contains a refresh token
 
 <br>
 
-  Response examples:
+  <h6>Response examples:</h6>
   
     HTTP 200 OK
     {
@@ -161,27 +190,30 @@ Django REST API application for blog.
         "detail": "Token is invalid or expired",
         "code": "token_not_valid"
     }
-   
-   
-<h3>Creating and getting posts</h3>
-
-Allows to create posts (for authorized users, acces token required) and get list of all posts or certain user's posts sorted by publication date in order from newest to olders. Post contains of fields: title, text, publication date, author. Field author gets a current authorized user, publication date gets a current UTS date and time value.
-
-  **Endpoints:**
-<ul>
-<li><h4>POST /api/post/</h4> - create post</li>
-</ul>
-<br>    
-
-  Header params
-  
-*Content-Type: application/json*
-
-*Authorization: Bearer {acces_token}*
 
 <br>
 
-  Body params: 
+<h3>Create and get a list of posts</h3>
+
+Allows to create posts (for the authorized users, an access token required) and get a list of all the certain user's posts sorted by a publication date in order from newest to oldest. The post contains fields: title, text, publication date, author. The field "author" gets a current authorized user, the field "publication date" gets a current UTC date and time value.
+
+<br>
+
+  **Endpoints:**
+<ul>
+<li><h4>POST /api/post/</h4> - create a post</li>
+</ul>
+<br>    
+
+  <h6>Header params</h6>
+  
+*Content-Type: application/json*
+
+*Authorization: Bearer {access_token}*
+
+<br>
+
+  <h6>Body params: </h6>
 
 *title* (required) - Max length 80 characters.
 *text* (required)
@@ -189,7 +221,7 @@ Allows to create posts (for authorized users, acces token required) and get list
 <br>
 
 
-  Response examples:
+  <h6>Response examples:</h6>
   
     HTTP 201 Created
     {
@@ -215,50 +247,20 @@ Allows to create posts (for authorized users, acces token required) and get list
         ]
     }
 
-   
-<ul>
-<li><h4>GET /api/post/</h4> - get all posts</li>
-</ul>
-<br>    
-
-  Response examples:   
-  
-  
-    HTTP 200 OK
-    [
-       {
-            "id": 3,
-            "title": "TextTitle3",
-            "text": "TestText3",
-            "author_id": 1,
-            "pub_date": "2023-04-07T17:39:37.172921Z"
-        },
-        {
-            "id": 2,
-            "title": "TextTitle2",
-            "text": "TestText2",
-            "author_id": 2,
-            "pub_date": "2023-04-07T17:37:16.608617Z"
-        },
-        {
-            "id": 1,
-            "title": "TextTitle1",
-            "text": "TestText1",
-            "author_id": 1,
-            "pub_date": "2023-04-07T17:36:07.213059Z"
-    ]
-<ul>
-<li><h4>GET /api/post/{user_id}/</h4> - get all posts by user with id = user_id</li>
-</ul>
-<br>    
-
- Path params:
- 
- *user_id* - integer
- 
 <br>
 
- Response examples:
+<ul>
+<li><h4>GET /api/post/{user_id}/</h4> - get all posts (optionally by a user with id = user_id)</li>
+</ul>
+<br>    
+
+ <h6>Path params:</h6>
+ 
+ *user_id* (optional) - integer
+
+<br>
+
+ <h6>Response examples:</h6>
  
  
     HTTP 200 OK
@@ -278,3 +280,120 @@ Allows to create posts (for authorized users, acces token required) and get list
             "pub_date": "2023-04-07T17:36:07.213059Z"
         }
     ]
+
+<br>
+
+<h3>Get a list of users</h3>
+
+Allows to get a list of users optionally sorted by number of posts.
+
+  **Endpoints:**
+<ul>
+<li><h4>GET /api/user/</h4> - get a list of users</li>
+</ul>
+
+<br>
+
+  <h6>Query params</h6>
+
+*sorting* (optional) - "posts_desc" to sort in descending order, "posts_asc" to sort in ascending order
+
+<br>
+
+  <h6>Response examples:</h6>
+  
+    HTTP 200 OK
+    [
+    {
+        "id": 1,
+        "username": "admin",
+        "number_of_posts": 9
+    },
+    {
+        "id": 2,
+        "username": "johndoe",
+        "number_of_posts": 3
+    },
+    {
+        "id": 3,
+        "username": "janedoe",
+        "number_of_posts": 5
+    }
+    ]
+
+<br>
+
+  
+<h3>Follow or unfollow a user</h3>
+
+Allows authorized users to start and stop following the posts of another user.
+
+
+**Endpoints:**
+<ul>
+<li><h4>PUT /api/user/{user_id}/follow</h4> - start following a user with id=user_id.</li>
+</ul>
+
+<br>
+
+  <h6>Path params</h6>
+*user_id* (required)
+
+<br>
+
+  <h6>Header params</h6>
+*Authorization: Bearer {access_token}*
+
+<br>
+
+<h6>Response examples:</h6>
+
+    HTTP 200 OK
+    {
+    "message": "User with id 3 was successfully followed."
+    }
+
+    HTTP 200 OK
+    {
+    "message": "User with id 2 is already followed."
+    }
+
+    HTTP 400 Bad Request
+    {
+    "message": "Cannot follow yourself."
+    }
+
+<br>
+
+<ul>
+<li><h4>PUT /api/user/{user_id}/unfollow</h4> - stop following a user with id=user_id.</li>
+</ul>
+
+<br>
+
+  <h6>Path params</h6>
+*user_id* (required)
+
+<br>
+
+  <h6>Header params</h6>
+*Authorization: Bearer {access_token}*
+
+<br>
+
+<h6>Response examples:</h6>
+
+    HTTP 200 OK
+    {
+    "message": "User with id 3 was successfully unfollowed."
+    }
+
+    HTTP 200 OK
+    {
+    "message": "User with id 2 is already not followed."
+    }
+
+    HTTP 400 Bad Request
+    {
+    "message": "Cannot unfollow yourself."
+    }

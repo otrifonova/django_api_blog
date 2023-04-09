@@ -10,7 +10,7 @@ class CreatePostTests(TestCase):
         cls.url = '/api/post/'
         cls.token_url = '/api/auth/token/'
 
-        cls.user_data = {"username": "TestUser",
+        cls.user_data = {"username": "test_user_post",
                          "password": "te$tPswd"}
 
         cls.valid_post_data = {'title': "TextTitle", 'text': "TestText"}

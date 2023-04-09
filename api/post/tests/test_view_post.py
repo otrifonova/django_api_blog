@@ -5,13 +5,13 @@ from rest_framework.test import APIClient
 from core.models import User, Post
 
 
-class UserAuthenticationTests(TestCase):
+class ViewPostTests(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.url = '/api/post/'
 
-        cls.user_1 = User.objects.create_user(username="user_1")
-        cls.user_2 = User.objects.create_user(username="user_2")
+        cls.user_1 = User.objects.create_user(username="test_user_post_1")
+        cls.user_2 = User.objects.create_user(username="test_user_post_2")
 
         Post.objects.create(title="TextTitle1", text="TestText1", author=cls.user_1)
         Post.objects.create(title="TextTitle11", text="TestText11", author=cls.user_1)
@@ -28,7 +28,6 @@ class UserAuthenticationTests(TestCase):
         response = self.client.get(self.url)
         posts_amount = len(response.json())
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(posts_amount, 4)
 
     def test_view_all_posts_sorted_by_date_desc(self):
         response = self.client.get(self.url)

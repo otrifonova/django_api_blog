@@ -1,5 +1,3 @@
-Django REST API application for blog.
-
 <h1>Launching:</h1>
 <ol>
 <li>Clone the repository</li>

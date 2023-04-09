@@ -2,7 +2,7 @@ Django REST API application for blog.
 
 <h1>Launching:</h1>
 <ol>
-<li>Clone repository</li>
+<li>Clone the repository</li>
 <li>Create and activate virtual environment:
 
     $ python -m venv venv
@@ -13,19 +13,25 @@ Django REST API application for blog.
     $ pip install -r requirements.txt
 </li>  
 <li>Create .env file and set global variables in it (SECRET_KEY and database (PostgreSQL) data: DB_NAME, DB_USER, DB_PASSWORD</li> 
-<li>Run database migration:
+<li>Run a database migration:
 
     $ python manage.py makemigrations
     $ python manage.py migrate
 </li> 
-<li>To run local server (at http://127.0.0.1:8000/) execute:
+<li>Create a superuser:
 
-    $ python manage.py runserver
+    $ python manage.py createsuperuser
 </li> 
 <li>To run unit tests execute:
 
     $ python manage.py tests
-</li> 
+</li>
+<li>To run a local server (at http://127.0.0.1:8000/) execute:
+
+    $ python manage.py runserver
+
+The Django admin interface is available on <b>/admin/</b>
+</li>
 </ol>
 
 <h1>API methods</h1>
